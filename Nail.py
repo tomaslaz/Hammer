@@ -5,6 +5,8 @@
 MPI based Cient side of the Task manager to run FHI-aims.
 
 @author Tomas Lazauskas, 2016
+@web www.lazauskas.net/hammer
+@email tomas.lazauskas[a]gmail.com
 """
 
 import datetime
@@ -40,10 +42,28 @@ class client(object):
     self.comm = MPI.Comm.Get_parent()
     self.rank = self.comm.Get_rank()
     self.size = self.comm.Get_size()
-
+    self.rsize = self.comm.Get_remote_size()
     
-    time.sleep(0.1)
+    self.name = MPI.Get_processor_name()
     
+    log(__name__, "Worker %000d | Reporting in on %s. The size is %d (Remote size: %d)" % 
+      (self.rank, self.name, self.size, self.rsize), 1)
+    
+    self.color = self.rank
+    self.key = 0
+    
+    # Splitting the communicator according to the rank
+    
+    self.newComm = MPI.COMM_WORLD.Split(self.color, self.key)
+    
+    #self.newComm = self.comm.Dup()
+    
+    #newcomm = self.comm.Split(self.color, self.key)
+    
+    #self.newComm = self.comm.Split(self.color, key=self.key)
+        
+    time.sleep(0.01)
+         
     # The work LOOP
     while True:
       
@@ -77,7 +97,7 @@ class client(object):
                
         log(__name__, "Worker %000d | started working on data" % (self.rank), 1)
                 
-        Aimer.runAims(self.comm, self.data, True)
+        Aimer.runAims(self.newComm, self.data, True)
         
         self._sendFinishedSignal(sourceRank)
                 
@@ -86,6 +106,7 @@ class client(object):
         self.data = None
     
     # stop the client
+    self.newComm.Free()
     self.comm.Disconnect()
   
   def _sendStopSignal(self, dest):

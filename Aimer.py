@@ -22,9 +22,9 @@ import numpy as np
 
 # Loading the library
 
-#_testlib = cdll.LoadLibrary(os.path.join("/Users/Tomas/Software/fhi-aims.071914_72/lib", "libaims.071914_7.scalapack.mpi.so"))
+_testlib = cdll.LoadLibrary(os.path.join("/Users/Tomas/Software/fhi-aims.071914_72/lib", "libaims.071914_7.scalapack.mpi.so"))
 
-_testlib = cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "TEST", "testLib"))
+#_testlib = cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "Library", "testLib.so"))
 
 _testlib.aims_.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_bool)]
 _testlib.aims_.restype = None
@@ -51,8 +51,6 @@ def runAims(comm, data, useMpi):
   so = os.open(outputFile, os.O_RDWR|os.O_CREAT)
   
   os.dup2(so, sys.stdout.fileno())
-  
-  print "os.getcwd()", os.getcwd()
   
   _testlib.aims_(byref(c_int(comm_int)), byref(c_int(fout_int)), byref(c_bool(useMpi)))
       

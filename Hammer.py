@@ -5,6 +5,8 @@
 MPI based Cient-Server Task manager to run FHI-aims.
 
 @author Tomas Lazauskas, 2016
+@web www.lazauskas.net/hammer
+@email tomas.lazauskas[a]gmail.com
 """
 
 import datetime
@@ -15,7 +17,6 @@ import subprocess
 import time
 
 from mpi4py import MPI
-
 
 import Config
 import System
@@ -144,11 +145,16 @@ class Server(object):
      
     """
     
-    log(__name__, "Server   | Starting MPI clients: %d" % (self.np), 0)
+    myinfo = MPI.Info.Create()
     
-    self.comm = MPI.COMM_SELF.Spawn(sys.executable, 
-      args=[os.path.join(self.srcDir, 'Nail.py'), self.workSpace, self.outputDir], maxprocs=self.np)
-        
+    # TODO: this file should be automatically generated. The number of entries should match the self.np
+    myinfo.Set("hostfile", "hammer_hosts")
+    
+    log(__name__, "Server   | Starting MPI clients: %d" % (self.np), 0)
+
+    self.comm = MPI.COMM_WORLD.Spawn(sys.executable, 
+      args=[os.path.join(self.srcDir, 'Nail.py'), self.workSpace, self.outputDir], maxprocs=self.np, info=myinfo)
+            
     self.rank = self.comm.Get_rank()
   
   def _terminateClients(self):
@@ -347,7 +353,7 @@ def log(caller, message, indent=0):
 
 def main():
   """
-  
+  The main loop.
   
   """
   

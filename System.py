@@ -5,6 +5,8 @@
 System module
 
 @author Tomas Lazauskas
+@web www.lazauskas.net/hammer
+@email tomas.lazauskas[a]gmail.com
 """
 
 import copy
