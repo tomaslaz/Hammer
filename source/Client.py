@@ -17,6 +17,8 @@ from mpi4py import MPI
 
 import Aimer
 import Config
+import Utilities
+from Utilities import log
 
 class client(object):
   """
@@ -53,16 +55,9 @@ class client(object):
     self.key = 0
     
     # Splitting the communicator according to the rank
-    
     self.newComm = MPI.COMM_WORLD.Split(self.color, self.key)
-    
-    #self.newComm = self.comm.Dup()
-    
-    #newcomm = self.comm.Split(self.color, self.key)
-    
-    #self.newComm = self.comm.Split(self.color, key=self.key)
         
-    time.sleep(0.01)
+    time.sleep(0.1)
          
     # The work LOOP
     while True:
@@ -185,7 +180,7 @@ if __name__ == "__main__":
   """
   
   if len(sys.argv) != 3:
-    print "Usage: Nail.py WORKDIR OUTPUTDIR"
+    print "Usage: Client.py WORKDIR OUTPUTDIR"
     print sys.argv
     sys.exit(1)
   
