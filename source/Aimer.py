@@ -24,7 +24,9 @@ import numpy as np
 
 #_testlib = cdll.LoadLibrary(os.path.join("/Users/Tomas/Software/fhi-aims.071914_72/lib", "libaims.071914_7.scalapack.mpi.so"))
 
-_testlib = cdll.LoadLibrary(os.path.join("/home/e05/e05/tomasl/Software/fhi-aims.071914_7/lib", "libaims.071914_7.scalapack.mpi.so"))
+libPath = os.path.join("/home/e05/e05/tomasl/Software/fhi-aims.071914_7/lib", "libaims.071914_7.scalapack.mpi.so")
+print libPath, os.path.isfile(libPath)
+_testlib = cdll.LoadLibrary(libPath)
 
 #_testlib = cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "Library", "testLib.so"))
 
