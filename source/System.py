@@ -15,7 +15,7 @@ import os
 
 import numpy as np
 
-from source import Atoms
+import Atoms
 
 class System(object):
   """

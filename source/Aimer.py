@@ -67,15 +67,3 @@ def runAims(comm, data, useMpi):
   
   sys.stdout = os.fdopen(newstdout, 'w')
   
-if __name__ == "__main__":
-  """
-  Testing the routine
-  
-  """
-  
-  temp = None
-  
-  temp.name = "foo.txt"
-  
-  runAims(MPI.COMM_SELF, outputFile, True)
-  
