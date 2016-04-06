@@ -11,26 +11,8 @@ import datetime
 import os
 import sys
 
-import System
-
 _nodesFile = "nodes.in"
 _hostFile = "hammer_hosts"
-
-def getFileFullName(filePath):
-  """
-  Returns a filename from a path
-  
-  """
-  
-  return os.path.basename(filePath)
-
-def getFileName(filePath):
-  """
-  Returns a filename from a path
-  
-  """
-
-  return os.path.splitext(os.path.basename(filePath))[0]
 
 def getNumberOfSlaves():
   """
@@ -45,34 +27,6 @@ def getNumberOfSlaves():
     
   return noOfSlaves
   
-def getStructuresFileList(dirPath=None):
-  """
-  Get the list of files
-  
-  """
-  
-  extList=['xyz']
-  
-  if dirPath is not None:
-    cwd = os.getcwd()
-    os.chdir(dirPath)
-  
-  filesList = []
-  
-  for root, _, files in os.walk("./"):
-    for fileName in files:
-      
-      for ext in extList:
-      
-        if fileName.endswith(ext):
-          
-          filesList.append(os.path.join(dirPath, fileName))
-
-  if dirPath is not None:
-    os.chdir(cwd)
-    
-  return filesList
-
 def log(caller, message, indent=0):
   """
   Log output to screen
@@ -85,48 +39,6 @@ def log(caller, message, indent=0):
       ind += "  "
       
   print "[%s]: %s%s >> %s" % (now, ind, caller, message)
-
-def readInStructures(inputDirectory):
-  """
-  Read in the structures to be data mined
-  
-  """
-  success = True
-  error = ""
-  
-  systemsList = []
-  filesCnt = 0
-  systemsCnt = 0
-      
-  # look for structures in the input directory
-  filesList = getStructuresFileList(inputDirectory)
-  filesCnt = len(filesList)
-  
-  log(__name__, "Server   | Found %d files to be read in" % (filesCnt), 0)
-  
-  if filesCnt < 1:
-    success = False
-    error = __name__ + ": could not find structures to read in!"
-    
-    return success, error, systemsList
-  
-  log(__name__, "Server   | Reading in initial systems ", 0)
-  
-  for file in filesList:
-    log(__name__, "Server   | Reading in %s" % (file), 0)
-
-    read, readError, system = readSystemFromFileXYZ(file)
-    
-    if read:
-      systemsList.append(system)
-    else:
-      log(__name__, "Server   | Error while reading file %s: %s" % (file, readError), 0)
-  
-  # counting the number of read-in systems
-  if success:
-    noOfSystems = len(systemsList)
-      
-  return success, error, systemsList, noOfSystems
 
 def prepareHostFile(slavenp=1):
   """
@@ -196,75 +108,6 @@ def prepareHostFile(slavenp=1):
   
   return procCnt
   
-def readSystemFromFileXYZ(fileName):
-  """
-  Reads in the structure of a system from a XYZ file.
-  
-  """
-  
-  success = False
-  error = ""
-  system = None
-  
-  if not os.path.isfile(fileName):
-    error = __name__ +  "File [%s] doesn't exist." % (fileName)
-    return success, error, system
-  
-  try:
-    f = open(fileName)
-  except:
-    error = __name__ +  "Cannot read file [%s]" % (fileName)
-    return success, error, system
-  
-  line = f.readline().strip()
-  
-  NAtoms = int(line)
-      
-  system = System.System(NAtoms)
-  
-  # additional info
-  line = f.readline().strip()
-  
-  array = line.split()
-
-  # atoms and their positions
-  i = 0
-  for line in f:
-      array = line.strip().split()
-
-      sym = array[0].strip()
-      
-      if sym not in system.specieList:
-          system.addSpecie(sym)
-      
-      specInd = system.specieIndex(sym)
-      
-      system.specieCount[specInd] += 1
-      
-      system.specie[i] = specInd
-      
-      for j in range(3):
-          system.pos[i*3 + j] = float(array[j+1])
-      
-      try:
-          system.charge[i] = array[4]
-      except:
-          system.charge[i] = 0.0
-      
-      i += 1
-      
-      if i == NAtoms:
-        break
-  
-  f.close()
-  
-  system.name = getFileName(fileName)
-  system.fileName = getFileFullName(fileName)
-  
-  success = True
-  
-  return success, error, system
-
 def uniqueItems(seq):
     """
     Return list of unique items in given list.

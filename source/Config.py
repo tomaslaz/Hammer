@@ -1,5 +1,5 @@
 """
-General settings.
+General settings
 
 @author Tomas Lazauskas, 2016
 @web www.lazauskas.net/hammer

@@ -1,5 +1,5 @@
 """
-HAMMER - an MPI based python library to execute 
+HAMMER - an MPI based python package to run client/server model on a machine
 
 @author Tomas Lazauskas, 2016
 @web www.lazauskas.net/hammer
@@ -50,11 +50,12 @@ def main():
   numberOfSlaves = Utilities.getNumberOfSlaves()
   
   if numberOfSlaves == 0:
-    sys.exit(__name__ + ": ERROR: OMP_NUM_THREADS is not set!")
+    Utilities.log(__name__, ": WARNING: OMP_NUM_THREADS is not set! Using a default value: 1.", 0)
+    numberOfSlaves = 1
     
   else:
     Utilities.log(__name__, "OMP_NUM_THREADS is set to %d" % (numberOfSlaves), 0)
-  
+
   # preparing the hosts according to nodes.in file
   numberOfProc = Utilities.prepareHostFile(slavenp=numberOfSlaves)
   

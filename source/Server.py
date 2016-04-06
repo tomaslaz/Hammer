@@ -19,7 +19,6 @@ import time
 from mpi4py import MPI
 
 from . import Config
-from . import System
 from . import Utilities
 from .Utilities import log
 
@@ -146,7 +145,7 @@ class Server(object):
     
     myinfo = MPI.Info.Create()
     
-    # TODO: this file should be automatically generated. The number of entries should match the self.np
+    # TODO: this file should be automatically generated. The number of entries should match self.np
     myinfo.Set("hostfile", "hammer_hosts")
     
     log(__name__, "Server   | Starting MPI clients: %d" % (self.np), 0)
@@ -166,12 +165,12 @@ class Server(object):
     self.sendStopSignalToAll(tag=Config._MPITagServer)
     
     recvCnt = 0
+    
     while True:
       
       clientData = self.comm.recv(source = MPI.ANY_SOURCE, tag = Config._MPITagClient)
       
       #print "Package No: %d, Got this from a client: " % (recvCnt), clientData
-      
       if (clientData[Config._MPISignalDataTag] == Config._MPISignalQuit):
         recvCnt += 1
       
@@ -188,10 +187,30 @@ def main(np):
   
   """
   
+  dataPackList = []
   results = []
+  success = False
+  error = "Data has not been read in"
   
-  # reading the structures
-  success, error, systemsList, systemsCnt = Utilities.readInStructures(os.getcwd())
+  
+  # 
+  # A section to read in data and send it to the clients
+  # The read in data should be a list: dataPackList
+  # 
+  
+  """ <<< Insert code here >>> """
+  
+  dataPackList = ["apple", "orange"]
+  success = True
+  
+  if not success:
+    sys.exit("ERROR: %s" % (error))
+  
+  dataPackCnt = len(dataPackList)
+  
+  if (dataPackCnt < 0):
+    success = False
+    error = "Have not read any data!"
   
   if not success:
     sys.exit("ERROR: %s" % (error))
@@ -204,7 +223,7 @@ def main(np):
   # sending the initial data
   serverStartTime = time.time()
   
-  for clientRank in range(min(np, systemsCnt)):
+  for clientRank in range(min(np, dataPackCnt)):
     server.sendDataToClient(clientRank, systemsList.pop(), Config._MPITagServer)
   
   recvCnt = 0
@@ -230,7 +249,7 @@ def main(np):
         dataPackage = systemsList.pop()
         clientRank = clientData[Config._MPIRankTag]
   
-        server.sendDataToClient(clientRank, dataPackage)
+        server.sendDataToClient(clientRank, dataPackCnt)
         
       else:
         log(__name__, "Server   | No more jobs to send to client %d " % (clientData[Config._MPIRankTag]), 0)
@@ -239,14 +258,14 @@ def main(np):
       break
   
   server.finalise()
-
-def prepareEnvironment():
-  """
-  Prepares the environment to run the server
-  
-  """
   
   # 
+  # A section to post-process the data received from the clients
+  #
+  
+  """ <<< Insert code here >>> """
+  
+  log(__name__, "Server   | Finished ", 0)
 
 if __name__ == '__main__':
   """

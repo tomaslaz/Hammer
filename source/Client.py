@@ -15,7 +15,6 @@ import time
 
 from mpi4py import MPI
 
-import Aimer
 import Config
 import Utilities
 from Utilities import log
