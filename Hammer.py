@@ -1,8 +1,8 @@
 """
 HAMMER - an MPI based python package to run client/server model on a machine
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
 
@@ -50,7 +50,7 @@ def main():
   numberOfSlaves = Utilities.getNumberOfSlaves()
   
   if numberOfSlaves == 0:
-    Utilities.log(__name__, ": WARNING: OMP_NUM_THREADS is not set! Using a default value: 1.", 0)
+    Utilities.log(__name__, ": WARNING: OMP_NUM_THREADS is not set! Using default value: 1.", 0)
     numberOfSlaves = 1
     
   else:

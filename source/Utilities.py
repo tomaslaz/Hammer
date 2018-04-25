@@ -1,10 +1,12 @@
 """
 A module to do miscellaneous tasks
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
+
+from __future__ import print_function
 
 import collections
 import datetime
@@ -35,10 +37,10 @@ def log(caller, message, indent=0):
   
   now = datetime.datetime.now().strftime("%d/%m/%y, %H:%M:%S: %f")
   ind = ""
-  for _ in xrange(indent):
+  for _ in range(indent):
       ind += "  "
       
-  print "[%s]: %s%s >> %s" % (now, ind, caller, message)
+  print ("[%s]: %s%s >> %s" % (now, ind, caller, message))
 
 def prepareHostFile(slavenp=1):
   """

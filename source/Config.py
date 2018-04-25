@@ -1,8 +1,8 @@
 """
 General settings
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
 

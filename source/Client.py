@@ -4,10 +4,12 @@
 """
 MPI based Cient side of the Task manager to run FHI-aims.
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
+
+from __future__ import print_function
 
 import datetime
 import sys
@@ -90,8 +92,8 @@ class client(object):
       if (self.data is not None):
                
         log(__name__, "Worker %000d | started working on data" % (self.rank), 1)
-                
-        Aimer.runAims(self.newComm, self.data, True)
+        
+        """ <<< Insert code here for number crunching >>> """
         
         self._sendFinishedSignal(sourceRank)
                 
@@ -167,10 +169,10 @@ def log(caller, message, indent=0):
   
   now = datetime.datetime.now().strftime("%d/%m/%y, %H:%M:%S: %f")
   ind = ""
-  for _ in xrange(indent):
+  for _ in range(indent):
       ind += "  "
       
-  print "[%s]: %s%s >> %s" % (now, ind, caller, message)
+  print ("[%s]: %s%s >> %s" % (now, ind, caller, message))
 
 if __name__ == "__main__":
   """
@@ -179,8 +181,8 @@ if __name__ == "__main__":
   """
   
   if len(sys.argv) != 3:
-    print "Usage: Client.py WORKDIR OUTPUTDIR"
-    print sys.argv
+    print ("Usage: Client.py WORKDIR OUTPUTDIR")
+    print (sys.argv)
     sys.exit(1)
   
   client = client(sys.argv[1], sys.argv[2])
