@@ -4,10 +4,12 @@
 """
 A module to get the version of the project from git.
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
+
+from __future__ import print_function
 
 import os
 import subprocess
@@ -43,8 +45,9 @@ def getGitVersion():
     status = proc.poll()
     if status:
       version = None
+      
     else:
-      version = stdout.strip().split("-")[0]
+      version = stdout.decode("utf-8").strip().split("-")[0]
   
   finally:
     os.chdir(cwd)
@@ -78,7 +81,8 @@ def getGitVersionDate(versionIn=None):
       if status:
         versionDate = None
       else:
-        versionDate = stdout.strip().split(" ")[0]
+        versionDate = stdout.decode("utf-8").strip().split(" ")[0]
+        
     finally:
       os.chdir(cwd)
       
@@ -133,13 +137,12 @@ def printVersionAuthor():
   
   version, date = getVersion()
   
-  print ""
-  print ""
-  print "%s v.%s (%s)" % (getName(), version, date)
-  print "Author: %s" % (getAuthor())
-  print "web: %s" % (getWeb())
-  print ""
-  print ""
+  print ("")
+  print ("")
+  print ("%s v.%s (%s)" % (getName(), version, date))
+  print ("Author: %s" % (getAuthor()))
+  print ("")
+  print ("")
 
 def readVersion():
   """
@@ -153,19 +156,19 @@ def readVersion():
   try:
     f = open(_versionFile)
   except:
-    print "Cannot read file %s" % (_versionFile)
+    print ("Cannot read file %s" % (_versionFile))
     return version, versionDate
   
   try:
     version = f.readline().strip()
   except:
-    print "Cannot read version from file %s" % (_versionFile)
+    print ("Cannot read version from file %s" % (_versionFile))
     return version, versionDate
   
   try:
     versionDate = f.readline().strip()
   except:
-    print "Cannot read date of the version from file %s" % (_versionFile)
+    print ("Cannot read date of the version from file %s" % (_versionFile))
     return version, versionDate
   
   f.close()
@@ -189,7 +192,7 @@ def writeVersion(version, date):
     try:
       f = open(_versionFile, "w")
     except:
-      print "Cannot open: %s" % (_versionFile)
+      print ("Cannot open: %s" % (_versionFile))
       
       os.chdir(cwd)
       return

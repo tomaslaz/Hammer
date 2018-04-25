@@ -1,3 +1,7 @@
+# Hammer files
+hammer_hosts
+source/version.info
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

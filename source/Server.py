@@ -4,8 +4,8 @@
 """
 MPI based Cient-Server Task manager to run FHI-aims.
 
-@author Tomas Lazauskas, 2016
-@web www.lazauskas.net/hammer
+@author Tomas Lazauskas, 2016-2018
+@web lazauskas.net
 @email tomas.lazauskas[a]gmail.com
 """
 
@@ -189,26 +189,20 @@ def main(np):
   
   dataPackList = []
   results = []
-  success = False
+  success = True
   error = "Data has not been read in"
   
-  
-  # 
-  # A section to read in data and send it to the clients
+  # A section to read in the data to send it to the clients
   # The read in data should be a list: dataPackList
-  # 
+  
+  # Example
+  dataPackList = ["apple", "orange"]
   
   """ <<< Insert code here >>> """
   
-  dataPackList = ["apple", "orange"]
-  success = True
-  
-  if not success:
-    sys.exit("ERROR: %s" % (error))
-  
   dataPackCnt = len(dataPackList)
   
-  if (dataPackCnt < 0):
+  if (dataPackCnt <= 0):
     success = False
     error = "Have not read any data!"
   
@@ -224,7 +218,7 @@ def main(np):
   serverStartTime = time.time()
   
   for clientRank in range(min(np, dataPackCnt)):
-    server.sendDataToClient(clientRank, systemsList.pop(), Config._MPITagServer)
+    server.sendDataToClient(clientRank, dataPackList.pop(), Config._MPITagServer)
   
   recvCnt = 0
   
@@ -244,9 +238,9 @@ def main(np):
           
     elif (clientData[Config._MPISignalDataTag] == Config._MPISignalReady4Data):
       
-      if len(systemsList) > 0:
+      if len(dataPackList) > 0:
       
-        dataPackage = systemsList.pop()
+        dataPackage = dataPackList.pop()
         clientRank = clientData[Config._MPIRankTag]
   
         server.sendDataToClient(clientRank, dataPackCnt)
@@ -254,7 +248,7 @@ def main(np):
       else:
         log(__name__, "Server   | No more jobs to send to client %d " % (clientData[Config._MPIRankTag]), 0)
         
-    if (recvCnt >= systemsCnt):
+    if (recvCnt >= dataPackCnt):
       break
   
   server.finalise()
