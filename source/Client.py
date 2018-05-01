@@ -45,12 +45,11 @@ class client(object):
     self.comm = MPI.Comm.Get_parent()
     self.rank = self.comm.Get_rank()
     self.size = self.comm.Get_size()
-    self.rsize = self.comm.Get_remote_size()
     
     self.name = MPI.Get_processor_name()
     
-    log(__name__, "Worker %000d | Reporting in on %s. The size is %d (Remote size: %d)" % 
-      (self.rank, self.name, self.size, self.rsize), 1)
+    log(__name__, "Worker %000d | Reporting in on %s. The size is %d" % 
+      (self.rank, self.name, self.size), 1)
     
     self.color = self.rank
     self.key = 0
